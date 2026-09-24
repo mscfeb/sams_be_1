@@ -1,9 +1,8 @@
-import { app } from "./index.js";
+import app from "./index.js";
 import { env } from "./src/config/env.js";
-import prisma from "./src/lib/prisma.js";
 
 const server = app.listen(env.PORT, () => {
-  console.log(`Backend listening on port ${env.PORT}`);
+  console.log(`Server is running on port ${env.PORT}`);
 });
 
 server.on("error", (error) => {
@@ -13,8 +12,8 @@ server.on("error", (error) => {
 
 async function shutdown(signal) {
   console.log(`Received ${signal}, shutting down.`);
-  server.close(async () => {
-    await prisma.$disconnect();
+
+  server.close(() => {
     process.exit(0);
   });
 }
