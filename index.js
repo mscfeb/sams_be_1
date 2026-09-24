@@ -25,9 +25,48 @@ const app = express();
 
 app.use(helmet());
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:3000",
+  "https://sams-fe.vercel.app",
+  env.CORS_ORIGIN
+].filter(Boolean);
+
 app.use(
   cors({
-    origin: env.CORS_ORIGIN
+    origin: (origin, callback) => {
+      // Requests without an Origin header
+      // such as server-to-server requests.
+      if (!origin) {
+        return callback(null, true);
+      }
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      console.error("CORS blocked origin:", origin);
+
+      return callback(
+        new Error(`CORS origin not allowed: ${origin}`)
+      );
+    },
+
+    methods: [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "OPTIONS"
+    ],
+
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization"
+    ],
+
+    optionsSuccessStatus: 204
   })
 );
 
