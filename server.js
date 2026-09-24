@@ -1,6 +1,6 @@
-import { app } from "./app.js";
-import { env } from "./config/env.js";
-import prisma from "./lib/prisma.js";
+import { app } from "./index.js";
+import { env } from "./src/config/env.js";
+import prisma from "./src/lib/prisma.js";
 
 const server = app.listen(env.PORT, () => {
   console.log(`Backend listening on port ${env.PORT}`);
